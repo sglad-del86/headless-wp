@@ -1,11 +1,16 @@
 import Link from 'next/link';
 
 async function getPosts() {
-  const res = await fetch('https://cms.project8change.com/wp-json/wp/v2/posts?_embed', {
-    next: { revalidate: 3600 },
-  });
-  if (!res.ok) throw new Error('Failed to fetch posts');
-  return res.json();
+  try {
+    const res = await fetch('https://cms.project8change.com/wp-json/wp/v2/posts?_embed', {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return [];
+    return res.json();
+  } catch (error) {
+    console.error('Fetch error:', error);
+    return [];
+  }
 }
 
 export default async function Page() {
