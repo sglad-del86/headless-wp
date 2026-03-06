@@ -1,0 +1,40 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-primary: #1a1a1a;
+  --color-secondary: #666666;
+  --color-accent: #ff6b35;
+  --color-bg-base: #f9f9f9;
+  
+  --font-sans: "Inter", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Segoe UI", "Roboto", "Meiryo", sans-serif;
+  
+  --shadow-premium: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+  --shadow-premium-hover: 0 30px 60px -15px rgba(0, 0, 0, 0.1);
+}
+
+:root {
+  --background: #f9f9f9;
+  --foreground: #1a1a1a;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+
+/* リンクのデフォルト挙動をリセット */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* 究極のレスポンシブ画像設定 */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
