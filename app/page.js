@@ -1,9 +1,11 @@
 import Link from 'next/link';
+export const dynamic = 'force-dynamic';
 
 async function getPosts() {
   try {
     const res = await fetch('https://cms.project8change.com/wp-json/wp/v2/posts?_embed', {
-      next: { revalidate: 3600 },
+      cache: 'no-store',
+      next: { revalidate: 0 },
     });
     if (!res.ok) return [];
     return res.json();
