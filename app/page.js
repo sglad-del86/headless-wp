@@ -17,53 +17,92 @@ export default async function Page() {
   const posts = await getPosts();
 
   return (
-    <main className="min-h-screen bg-[#f9f9f9]">
-      {/* ナビゲーション: スマホでは控えめに、PCではゆったりと */}
-      <nav className="fixed top-0 right-0 p-6 sm:p-8 md:p-12 z-50">
+    <main className="min-h-screen bg-white">
+      {/* Editorial Header */}
+      <header className="pt-24 pb-12 sm:pt-40 sm:pb-24 px-6 sm:px-12 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-end gap-8 border-b border-gray-100">
+        <div className="animate-fade-in">
+          <h1 className="text-[10px] font-bold tracking-[0.6em] text-accent uppercase mb-6">
+            Project 8 Change
+          </h1>
+          <p className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-[0.9] max-w-2xl">
+            Thoughts & Observations.
+          </p>
+        </div>
+        <div className="hidden md:block pb-2 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+          <p className="text-[11px] font-medium text-secondary uppercase tracking-[0.2em]">
+            Volume 01 / Mar 2026
+          </p>
+        </div>
+      </header>
+
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 w-full p-6 sm:p-10 z-50 mix-blend-difference pointer-events-none">
         <Link 
           href="/" 
-          className="text-[10px] font-bold tracking-[0.4em] text-gray-400 hover:text-[#1a1a1a] transition-all uppercase"
+          className="text-[10px] font-bold tracking-[0.4em] text-white hover:opacity-70 transition-opacity uppercase pointer-events-auto"
         >
           Index
         </Link>
       </nav>
 
-      {/* 記事一覧: 流動的な余白 (Fluid Spacing) */}
-      <section className="max-w-7xl mx-auto px-5 sm:px-10 pt-20 sm:pt-32 pb-32 sm:pb-48 md:pt-48 md:pb-64">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 md:gap-x-16 gap-y-16 sm:gap-y-24 md:gap-y-40">
-          {posts.map((post) => {
+      {/* Post Grid */}
+      <section className="max-w-7xl mx-auto px-6 sm:px-12 py-16 sm:py-32">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20 sm:gap-y-32">
+          {posts.map((post, index) => {
             const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url;
             
             return (
-              <article key={post.id} className="group cursor-pointer">
+              <article 
+                key={post.id} 
+                className="group animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
                 <Link href={`/posts/${post.id}`} className="block">
-                  {/* カード: レスポンシブな角丸とエフェクト */}
-                  <div className="bg-white rounded-[2rem] sm:rounded-[3rem] overflow-hidden shadow-[0_10px_30px_-10px_rgba(0,0,0,0.02)] transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.06)] group-hover:-translate-y-4">
-                    
-                    <div className="aspect-[16/10] overflow-hidden">
+                  <div className="space-y-8">
+                    {/* Visual Container */}
+                    <div className="aspect-[4/5] overflow-hidden rounded-sm bg-gray-50 relative">
                       {featuredImage ? (
                         <img 
                           src={featuredImage} 
                           alt=""
-                          className="w-full h-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-105"
+                          className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] scale-100 group-hover:scale-110"
                           loading="lazy"
                         />
                       ) : (
-                        <div className="w-full h-full bg-gray-50 flex items-center justify-center text-gray-200 text-[10px] font-bold tracking-widest uppercase">
-                          No Image
+                        <div className="w-full h-full flex items-center justify-center text-[10px] font-bold tracking-[0.5em] text-gray-200 uppercase">
+                          No Visual
                         </div>
                       )}
+                      
+                      {/* Overlay for premium feel */}
+                      <div className="absolute inset-0 border border-black/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                     </div>
                     
-                    {/* カード内余白のレスポンシブ化 */}
-                    <div className="p-7 sm:p-10 md:p-14">
-                      <time className="text-[9px] sm:text-[10px] font-bold tracking-[0.3em] text-gray-300 mb-4 sm:mb-6 block uppercase border-b border-gray-50 pb-4">
-                        {new Date(post.date).toLocaleDateString('ja-JP')}
-                      </time>
+                    {/* Content Section */}
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-4">
+                        <span className="h-[1px] w-8 bg-accent" />
+                        <time className="text-[9px] font-bold tracking-[0.3em] text-secondary uppercase">
+                          {new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })}
+                        </time>
+                      </div>
+                      
                       <h2 
-                        className="text-xl sm:text-2xl md:text-3xl font-bold leading-snug sm:leading-tight text-[#1a1a1a] group-hover:text-gray-600 transition-colors duration-500"
+                        className="text-2xl sm:text-3xl font-bold leading-[1.1] tracking-tight group-hover:text-accent transition-colors duration-500"
                         dangerouslySetInnerHTML={{ __html: post.title.rendered }} 
                       />
+                      
+                      <div 
+                        className="text-sm text-secondary line-clamp-3 leading-relaxed"
+                        dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}
+                      />
+                      
+                      <div className="pt-4 overflow-hidden">
+                        <span className="text-[10px] font-extrabold uppercase tracking-[0.4em] inline-flex items-center gap-2 relative">
+                          Read Archive
+                          <span className="w-0 group-hover:w-6 h-[1px] bg-accent transition-all duration-500" />
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </Link>
@@ -73,13 +112,21 @@ export default async function Page() {
         </div>
       </section>
 
-      <footer className="pb-20 sm:pb-32 text-center">
-        <span className="text-[10px] font-bold tracking-[0.5em] text-gray-200 uppercase">
-          © 2026 Archive
-        </span>
+      <footer className="py-32 border-t border-gray-50 px-6">
+        <div className="max-w-7xl mx-auto flex flex-col items-center gap-8">
+          <span className="text-[10px] font-bold tracking-[0.6em] text-accent uppercase">
+            Project 8 Change
+          </span>
+          <div className="flex gap-12 text-[9px] font-bold tracking-[0.4em] text-gray-300 uppercase">
+            <a href="#" className="hover:text-primary transition-colors">Privacy</a>
+            <a href="#" className="hover:text-primary transition-colors">Contact</a>
+            <a href="#" className="hover:text-primary transition-colors">Instagram</a>
+          </div>
+          <p className="text-[10px] font-bold tracking-[0.5em] text-gray-200 uppercase mt-8">
+            © 2026 Archive Series
+          </p>
+        </div>
       </footer>
     </main>
   );
 }
-
-// v2: Triggering Vercel rebuild

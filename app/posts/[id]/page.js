@@ -17,64 +17,94 @@ export default async function PostPage({ params }) {
   const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url;
 
   return (
-    <main className="min-h-screen bg-[#f9f9f9]">
-      {/* 戻るボタン: スマホでは控えめに */}
-      <nav className="p-6 sm:p-8 md:p-12">
+    <main className="min-h-screen bg-white">
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 w-full p-6 sm:p-10 z-50 mix-blend-difference pointer-events-none flex justify-between items-center">
         <Link 
           href="/" 
-          className="text-[10px] font-bold tracking-[0.4em] text-gray-400 hover:text-[#1a1a1a] transition-all uppercase"
+          className="text-[10px] font-bold tracking-[0.4em] text-white hover:opacity-70 transition-opacity uppercase pointer-events-auto"
         >
-          ← Back
+          ← Index
         </Link>
+        <div className="hidden sm:block">
+          <span className="text-[10px] font-bold tracking-[0.4em] text-white uppercase opacity-40">
+            Reader View
+          </span>
+        </div>
       </nav>
 
-      <article className="px-5 sm:px-10 pb-24 sm:pb-40">
-        {/* ヘッダー: 流動的なフォントサイズ */}
-        <header className="max-w-2xl mx-auto pt-8 sm:pt-16 md:pt-24 mb-12 sm:mb-20 md:mb-32">
-          <time className="text-[9px] sm:text-[10px] font-bold tracking-[0.3em] text-gray-300 mb-6 sm:mb-8 block uppercase">
-            {new Date(post.date).toLocaleDateString('ja-JP')}
-          </time>
+      <article className="pb-32 sm:pb-48">
+        {/* Editorial Title Section */}
+        <header className="pt-32 sm:pt-48 pb-16 sm:pb-24 px-6 sm:px-12 max-w-4xl mx-auto border-b border-gray-100 mb-16 sm:mb-24 animate-fade-in text-center">
+          <div className="flex items-center justify-center gap-4 mb-10">
+            <span className="h-[1px] w-8 bg-accent" />
+            <time className="text-[10px] font-bold tracking-[0.4em] text-accent uppercase">
+              {new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })}
+            </time>
+            <span className="h-[1px] w-8 bg-accent" />
+          </div>
+          
           <h1 
-            className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-[#1a1a1a] leading-[1.2] sm:leading-[1.15] tracking-tight"
+            className="text-4xl sm:text-6xl md:text-7xl font-extrabold text-primary leading-[1] tracking-tighter mb-12"
             dangerouslySetInnerHTML={{ __html: post.title.rendered }}
           />
+          
+          <div className="flex justify-center gap-12 text-[10px] font-bold tracking-[0.2em] text-secondary uppercase">
+            <span>By Editorial Staff</span>
+            <span>Est. 4 min read</span>
+          </div>
         </header>
 
-        {/* ヒーロー画像: レスポンシブな角丸 */}
+        {/* Hero Image - Visual focus */}
         {featuredImage && (
-          <div className="max-w-4xl mx-auto mb-16 sm:mb-24 md:mb-32">
-            <div className="aspect-[16/9] sm:aspect-video w-full rounded-[2rem] sm:rounded-[3rem] overflow-hidden shadow-[0_20px_50px_-10px_rgba(0,0,0,0.05)] bg-slate-100">
-              <img src={featuredImage} alt="" className="w-full h-full object-cover" />
+          <div className="max-w-6xl mx-auto mb-20 sm:mb-32 px-6 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <div className="aspect-[21/9] w-full bg-gray-50 overflow-hidden">
+              <img 
+                src={featuredImage} 
+                alt="" 
+                className="w-full h-full object-cover grayscale-[0.5] hover:grayscale-0 transition-all duration-1000" 
+              />
             </div>
           </div>
         )}
 
-        {/* 本文: 可読性を重視したレスポンシブタイポグラフィ */}
-        <div className="max-w-2xl mx-auto">
+        {/* Content Body - Prose powered */}
+        <div className="max-w-3xl mx-auto px-6 animate-fade-in" style={{ animationDelay: '0.4s' }}>
           <div 
-            className="prose prose-neutral prose-base sm:prose-lg md:prose-xl max-w-none 
-              prose-headings:text-[#1a1a1a] prose-headings:font-bold prose-headings:tracking-tight
-              prose-p:text-[#333333] prose-p:leading-[1.7] sm:prose-p:leading-[1.8]
-              prose-a:text-[#1a1a1a] prose-a:font-bold prose-a:underline prose-a:underline-offset-4
-              prose-img:rounded-[1.5rem] sm:prose-img:rounded-[2rem] prose-img:w-full prose-img:h-auto"
+            className="prose prose-neutral prose-lg sm:prose-xl max-w-none 
+              prose-headings:text-primary prose-headings:font-extrabold prose-headings:tracking-tighter
+              prose-p:text-secondary prose-p:leading-[1.8] prose-p:mb-8
+              prose-a:text-accent prose-a:font-bold prose-a:no-underline hover:prose-a:underline
+              prose-blockquote:border-l-accent prose-blockquote:bg-gray-50/50 prose-blockquote:p-8 prose-blockquote:italic prose-blockquote:text-primary
+              prose-img:rounded-sm prose-img:shadow-2xl prose-img:my-16
+              prose-strong:text-primary
+              selection:bg-accent/20 selection:text-primary"
             dangerouslySetInnerHTML={{ __html: post.content.rendered }}
           />
 
-          <div className="mt-20 sm:mt-32 pt-16 border-t border-gray-100 flex justify-center">
+          {/* Footer Navigation */}
+          <div className="mt-32 pt-16 border-t border-gray-100 flex flex-col items-center gap-12">
+            <p className="text-[11px] font-bold tracking-[0.5em] text-gray-300 uppercase">
+              End of Chapter
+            </p>
             <Link 
               href="/" 
-              className="px-10 sm:px-14 py-4 sm:py-5 bg-[#1a1a1a] text-white font-bold hover:bg-gray-800 transition-all text-[10px] uppercase tracking-[0.4em] rounded-full shadow-xl active:scale-95 text-center"
+              className="group flex flex-col items-center gap-4 py-8"
             >
-              Scroll to Index
+              <span className="text-[10px] font-extrabold uppercase tracking-[0.6em] text-primary group-hover:text-accent transition-colors">
+                Return to Index
+              </span>
+              <div className="w-12 h-[1px] bg-gray-200 group-hover:w-24 group-hover:bg-accent transition-all duration-700" />
             </Link>
           </div>
         </div>
       </article>
 
-      <footer className="py-24 text-center opacity-20">
-        <p className="text-[10px] font-bold uppercase tracking-[0.5em]">
-          End of Journal
-        </p>
+      {/* Sidebar Info (Scroll persistent feel) */}
+      <footer className="py-24 border-t border-gray-50 text-center">
+        <span className="text-[10px] font-bold tracking-[0.6em] text-accent uppercase">
+          Project 8 Change
+        </span>
       </footer>
     </main>
   );
