@@ -57,15 +57,15 @@ export default function ContactForm() {
   if (status === 'success') {
     return (
       <div className="py-20 text-center animate-fade-in">
-        <h2 className="text-3xl font-bold mb-6 italic">Message Sent.</h2>
+        <h2 className="text-3xl font-bold mb-6 italic">送信完了</h2>
         <p className="text-[10px] font-bold tracking-[0.4em] text-secondary uppercase px-6">
-          Thank you for reaching out. We will respond to tomo81222chapu@gmail.com shortly.
+          お問い合わせありがとうございます。tomo81222chapu@gmail.com 宛に折り返しご連絡いたします。
         </p>
         <button 
           onClick={() => setStatus('idle')}
           className="mt-12 text-[10px] font-bold tracking-[0.5em] text-accent uppercase hover:opacity-50 transition-opacity"
         >
-          Send another message
+          別のお問い合わせを送る
         </button>
       </div>
     );
@@ -79,41 +79,41 @@ export default function ContactForm() {
       </div>
 
       <div className="space-y-2 group">
-        <label className="text-[10px] font-bold tracking-[0.3em] text-secondary uppercase">Full Name</label>
+        <label className="text-[10px] font-bold tracking-[0.3em] text-secondary uppercase">お名前</label>
         <input
           required
           name="name"
           type="text"
-          placeholder="Enter your name"
+          placeholder="氏名を入力してください"
           className="w-full bg-transparent border-b border-gray-100 py-4 focus:border-accent outline-none transition-colors duration-500 font-medium placeholder:text-gray-200"
         />
       </div>
 
       <div className="space-y-2 group">
-        <label className="text-[10px] font-bold tracking-[0.3em] text-secondary uppercase">Email Address</label>
+        <label className="text-[10px] font-bold tracking-[0.3em] text-secondary uppercase">メールアドレス</label>
         <input
           required
           name="email"
           type="email"
-          placeholder="your@email.com"
+          placeholder="example@email.com"
           className="w-full bg-transparent border-b border-gray-100 py-4 focus:border-accent outline-none transition-colors duration-500 font-medium placeholder:text-gray-200"
         />
       </div>
 
       <div className="space-y-2 group">
-        <label className="text-[10px] font-bold tracking-[0.3em] text-secondary uppercase">Message</label>
+        <label className="text-[10px] font-bold tracking-[0.3em] text-secondary uppercase">お問い合わせ内容</label>
         <textarea
           required
           name="message"
           rows="5"
-          placeholder="How can we help you?"
+          placeholder="ご質問やご相談内容をご記入ください"
           className="w-full bg-transparent border-b border-gray-100 py-4 focus:border-accent outline-none transition-colors duration-500 font-medium placeholder:text-gray-200 resize-none"
         ></textarea>
       </div>
 
       {status === 'error' && (
         <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest bg-red-50 p-4 rounded-sm">
-          Error: {errorMessage}
+          エラー: {errorMessage}
         </p>
       )}
 
@@ -123,7 +123,7 @@ export default function ContactForm() {
         className="group relative w-full py-6 bg-primary text-white font-bold text-[10px] uppercase tracking-[0.6em] overflow-hidden transition-all hover:bg-black active:scale-[0.98] disabled:opacity-50"
       >
         <span className="relative z-10">
-          {status === 'loading' ? 'Encrypting & Sending...' : 'Dispatch Message'}
+          {status === 'loading' ? '送信中...' : 'メッセージを送信する'}
         </span>
         <div className="absolute inset-0 bg-accent translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
       </button>

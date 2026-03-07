@@ -29,16 +29,16 @@ export default function ContactPage() {
                 Communications
               </h1>
               <h2 className="text-4xl sm:text-6xl font-extrabold tracking-tighter leading-[0.9] mb-12">
-                Let&apos;s start a<br />conversation.
+                対話を、<br />はじめましょう。
               </h2>
               <div className="flex gap-12 text-[9px] font-bold tracking-[0.2em] text-secondary uppercase">
                 <div>
-                  <p className="text-accent mb-2">Editorial Inquiry</p>
+                  <p className="text-accent mb-2">お問い合わせ先</p>
                   <p>tomo81222chapu@gmail.com</p>
                 </div>
                 <div>
-                  <p className="text-accent mb-2">Office Hours</p>
-                  <p>Mon — Fri, 9am — 5pm</p>
+                  <p className="text-accent mb-2">営業時間</p>
+                  <p>月曜 — 金曜, 9時 — 17時</p>
                 </div>
               </div>
             </header>

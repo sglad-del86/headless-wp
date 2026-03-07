@@ -106,7 +106,7 @@ export default async function PostPage({ params }) {
             href="/contact" 
             className="text-[10px] font-bold tracking-[0.4em] text-white hover:opacity-70 transition-opacity uppercase pointer-events-auto"
           >
-            Inquiry
+            お問い合わせ
           </Link>
         </div>
         <div className="hidden sm:block">
