@@ -78,41 +78,41 @@ export default function ContactForm() {
         <input type="text" name="website" tabIndex="-1" autoComplete="off" />
       </div>
 
-      <div className="space-y-2 group">
-        <label className="text-[10px] font-bold tracking-[0.3em] text-secondary uppercase">お名前</label>
+      <div className="space-y-4 group">
+        <label className="text-[12px] font-bold tracking-[0.3em] text-secondary uppercase">お名前</label>
         <input
           required
           name="name"
           type="text"
           placeholder="氏名を入力してください"
-          className="w-full bg-transparent border-b border-gray-100 py-4 focus:border-accent outline-none transition-colors duration-500 font-medium placeholder:text-gray-200"
+          className="w-full bg-transparent border-b border-gray-100 py-6 focus:border-accent outline-none transition-colors duration-500 text-lg font-medium placeholder:text-gray-200"
         />
       </div>
 
-      <div className="space-y-2 group">
-        <label className="text-[10px] font-bold tracking-[0.3em] text-secondary uppercase">メールアドレス</label>
+      <div className="space-y-4 group">
+        <label className="text-[12px] font-bold tracking-[0.3em] text-secondary uppercase">メールアドレス</label>
         <input
           required
           name="email"
           type="email"
           placeholder="example@email.com"
-          className="w-full bg-transparent border-b border-gray-100 py-4 focus:border-accent outline-none transition-colors duration-500 font-medium placeholder:text-gray-200"
+          className="w-full bg-transparent border-b border-gray-100 py-6 focus:border-accent outline-none transition-colors duration-500 text-lg font-medium placeholder:text-gray-200"
         />
       </div>
 
-      <div className="space-y-2 group">
-        <label className="text-[10px] font-bold tracking-[0.3em] text-secondary uppercase">お問い合わせ内容</label>
+      <div className="space-y-4 group">
+        <label className="text-[12px] font-bold tracking-[0.3em] text-secondary uppercase">お問い合わせ内容</label>
         <textarea
           required
           name="message"
           rows="5"
           placeholder="ご質問やご相談内容をご記入ください"
-          className="w-full bg-transparent border-b border-gray-100 py-4 focus:border-accent outline-none transition-colors duration-500 font-medium placeholder:text-gray-200 resize-none"
+          className="w-full bg-transparent border-b border-gray-100 py-6 focus:border-accent outline-none transition-colors duration-500 text-lg font-medium placeholder:text-gray-200 resize-none"
         ></textarea>
       </div>
 
       {status === 'error' && (
-        <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest bg-red-50 p-4 rounded-sm">
+        <p className="text-red-500 text-[12px] font-bold uppercase tracking-widest bg-red-50 p-6 rounded-sm">
           エラー: {errorMessage}
         </p>
       )}
@@ -120,7 +120,7 @@ export default function ContactForm() {
       <button
         disabled={status === 'loading'}
         type="submit"
-        className="group relative w-full py-6 bg-primary text-white font-bold text-[10px] uppercase tracking-[0.6em] overflow-hidden transition-all hover:bg-black active:scale-[0.98] disabled:opacity-50"
+        className="group relative w-full py-8 bg-primary text-white font-bold text-[14px] uppercase tracking-[0.6em] overflow-hidden transition-all hover:bg-black active:scale-[0.98] disabled:opacity-50"
       >
         <span className="relative z-10">
           {status === 'loading' ? '送信中...' : 'メッセージを送信する'}
@@ -128,9 +128,17 @@ export default function ContactForm() {
         <div className="absolute inset-0 bg-accent translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
       </button>
 
-      <p className="text-[8px] text-gray-300 text-center tracking-widest uppercase italic">
-        Protected by Google reCAPTCHA v3 & Honeypot Logic
+      <p className="text-[10px] text-gray-400 text-center tracking-widest uppercase italic">
+        Protected by Google reCAPTCHA v3
       </p>
+
+      {/* Force reCAPTCHA badge visibility */}
+      <style jsx global>{`
+        .grecaptcha-badge { 
+          visibility: visible !important;
+          display: block !important;
+        }
+      `}</style>
     </form>
   );
 }

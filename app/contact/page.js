@@ -27,16 +27,16 @@ export default function ContactPage() {
           <div className="max-w-2xl mx-auto">
             {/* Header */}
             <header className="mb-20 sm:mb-32 animate-fade-in">
-              <h1 className="text-[10px] font-bold tracking-[0.6em] text-accent uppercase mb-8">
+              <h1 className="text-[12px] font-bold tracking-[0.6em] text-accent uppercase mb-8">
                 Communications
               </h1>
-              <h2 className="text-4xl sm:text-6xl font-extrabold tracking-tighter leading-[0.9] mb-12">
+              <h2 className="text-5xl sm:text-7xl font-extrabold tracking-tighter leading-[0.9] mb-12">
                 対話を、<br />はじめましょう。
               </h2>
-              <div className="flex gap-12 text-[9px] font-bold tracking-[0.2em] text-secondary uppercase">
-                <div>
-                  <p className="text-accent mb-2">お問い合わせ</p>
-                  <p>フォームよりお気軽にご連絡ください</p>
+              <div className="flex gap-12 text-[13px] font-medium text-secondary uppercase tracking-widest leading-relaxed">
+                <div className="border-l-2 border-accent pl-6">
+                  <p className="text-accent font-bold mb-2">お問い合わせ</p>
+                  <p className="text-primary">こちらのフォームより、<br />お気軽にご連絡ください。</p>
                 </div>
               </div>
             </header>
