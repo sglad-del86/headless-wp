@@ -2,9 +2,11 @@ import Link from 'next/link';
 import ContactForm from '../../components/ContactForm';
 import Providers from '../../components/Providers';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
-  title: 'Contact | Project 8 Change',
-  description: 'Get in touch with the Project 8 Change editorial team.',
+  title: 'お問い合わせ | Project 8 Change',
+  description: 'Project 8 Change お問い合わせフォーム',
 };
 
 export default function ContactPage() {
@@ -46,10 +48,14 @@ export default function ContactPage() {
           </div>
         </section>
 
-        <footer className="py-24 border-t border-gray-50 text-center">
+        <footer className="py-24 border-t border-gray-50 text-center relative">
           <span className="text-[10px] font-bold tracking-[0.6em] text-accent uppercase">
             Project 8 Change
           </span>
+          {/* Version identifier to confirm update */}
+          <div className="absolute bottom-4 right-4 text-[8px] text-gray-100 uppercase tracking-widest">
+            Update: SEC-01
+          </div>
         </footer>
       </main>
     </Providers>
