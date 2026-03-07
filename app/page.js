@@ -5,16 +5,18 @@ async function getPosts() {
   try {
     const res = await fetch('https://cms.project8change.com/wp-json/wp/v2/posts?_embed', {
       cache: 'no-store',
-      next: { revalidate: 0 },
       headers: {
-        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        'Accept': 'application/json',
       }
     });
     if (!res.ok) {
       console.error(`API response error: ${res.status} ${res.statusText}`);
       return [];
     }
-    return res.json();
+    const data = await res.json();
+    console.log(`Fetched ${data.length} posts`);
+    return Array.isArray(data) ? data : [];
   } catch (error) {
     console.error('Fetch error:', error);
     return [];
@@ -141,6 +143,10 @@ export default async function Page() {
           <p className="text-[10px] font-bold tracking-[0.5em] text-gray-200 uppercase mt-8">
             © 2026 Archive Series
           </p>
+          {/* Debug Info */}
+          <div className="mt-4 opacity-10 text-[8px] uppercase tracking-widest text-gray-400">
+            Node: {process.env.NODE_ENV} | Items: {posts.length}
+          </div>
         </div>
       </footer>
     </main>
