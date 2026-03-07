@@ -153,7 +153,7 @@ export default async function PostPage({ params }) {
           </div>
         )}
 
-        {/* Content Body - Prose powered */}
+        {/* Content Body - Prose powered with link optimization */}
         <div className="max-w-3xl mx-auto px-6 animate-fade-in" style={{ animationDelay: '0.4s' }}>
           <div 
             className="prose prose-neutral prose-lg sm:prose-xl max-w-none 
@@ -164,7 +164,18 @@ export default async function PostPage({ params }) {
               prose-img:rounded-sm prose-img:shadow-2xl prose-img:my-16
               prose-strong:text-primary
               selection:bg-accent/20 selection:text-primary"
-            dangerouslySetInnerHTML={{ __html: post.content.rendered }}
+            dangerouslySetInnerHTML={{ 
+              __html: post.content.rendered
+                // 1. 基本的なドメイン置換 (CMSリンクをフロントエンドへ)
+                .replaceAll('https://cms.project8change.com', '')
+                // 2. IDベースのリンク (?p=123) を /posts/123 形式に変換
+                .replace(/href="\/(\?p=\d+)"/g, (match, p) => {
+                  const id = p.split('=')[1];
+                  return `href="/posts/${id}"`;
+                })
+                // 3. 末尾スラッシュなどの調整をして正規化
+                .replace(/href="\/(?!posts|contact|api)([^"]+)"/g, 'href="/posts/$1"')
+            }}
           />
 
           {/* Footer Navigation */}
