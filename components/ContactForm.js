@@ -59,7 +59,7 @@ export default function ContactForm() {
       <div className="py-20 text-center animate-fade-in">
         <h2 className="text-3xl font-bold mb-6 italic">送信完了</h2>
         <p className="text-[10px] font-bold tracking-[0.4em] text-secondary uppercase px-6">
-          お問い合わせありがとうございます。tomo81222chapu@gmail.com 宛に折り返しご連絡いたします。
+          お問い合わせありがとうございます。内容を確認次第、折り返しご連絡いたします。
         </p>
         <button 
           onClick={() => setStatus('idle')}

@@ -33,12 +33,8 @@ export default function ContactPage() {
               </h2>
               <div className="flex gap-12 text-[9px] font-bold tracking-[0.2em] text-secondary uppercase">
                 <div>
-                  <p className="text-accent mb-2">お問い合わせ先</p>
-                  <p>tomo81222chapu@gmail.com</p>
-                </div>
-                <div>
-                  <p className="text-accent mb-2">営業時間</p>
-                  <p>月曜 — 金曜, 9時 — 17時</p>
+                  <p className="text-accent mb-2">お問い合わせ</p>
+                  <p>フォームよりお気軽にご連絡ください</p>
                 </div>
               </div>
             </header>
