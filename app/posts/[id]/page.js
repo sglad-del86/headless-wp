@@ -95,12 +95,20 @@ export default async function PostPage({ params }) {
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 w-full p-6 sm:p-10 z-50 mix-blend-difference pointer-events-none flex justify-between items-center">
-        <Link 
-          href="/" 
-          className="text-[10px] font-bold tracking-[0.4em] text-white hover:opacity-70 transition-opacity uppercase pointer-events-auto"
-        >
-          ← Index
-        </Link>
+        <div className="flex gap-8">
+          <Link 
+            href="/" 
+            className="text-[10px] font-bold tracking-[0.4em] text-white hover:opacity-70 transition-opacity uppercase pointer-events-auto"
+          >
+            ← Index
+          </Link>
+          <Link 
+            href="/contact" 
+            className="text-[10px] font-bold tracking-[0.4em] text-white hover:opacity-70 transition-opacity uppercase pointer-events-auto"
+          >
+            Inquiry
+          </Link>
+        </div>
         <div className="hidden sm:block">
           <span className="text-[10px] font-bold tracking-[0.4em] text-white uppercase opacity-40">
             Reader View

@@ -62,12 +62,18 @@ export default async function Page() {
       </header>
 
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 w-full p-6 sm:p-10 z-50 mix-blend-difference pointer-events-none">
+      <nav className="fixed top-0 left-0 w-full p-6 sm:p-10 z-50 mix-blend-difference pointer-events-none flex justify-between items-center">
         <Link 
           href="/" 
           className="text-[10px] font-bold tracking-[0.4em] text-white hover:opacity-70 transition-opacity uppercase pointer-events-auto"
         >
           Index
+        </Link>
+        <Link 
+          href="/contact" 
+          className="text-[10px] font-bold tracking-[0.4em] text-white hover:opacity-70 transition-opacity uppercase pointer-events-auto"
+        >
+          Inquiry
         </Link>
       </nav>
 
