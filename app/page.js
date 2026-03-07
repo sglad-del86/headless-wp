@@ -6,8 +6,14 @@ async function getPosts() {
     const res = await fetch('https://cms.project8change.com/wp-json/wp/v2/posts?_embed', {
       cache: 'no-store',
       next: { revalidate: 0 },
+      headers: {
+        'Content-Type': 'application/json',
+      }
     });
-    if (!res.ok) return [];
+    if (!res.ok) {
+      console.error(`API response error: ${res.status} ${res.statusText}`);
+      return [];
+    }
     return res.json();
   } catch (error) {
     console.error('Fetch error:', error);
@@ -49,69 +55,77 @@ export default async function Page() {
 
       {/* Post Grid */}
       <section className="max-w-7xl mx-auto px-6 sm:px-12 py-16 sm:py-32">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20 sm:gap-y-32">
-          {posts.map((post, index) => {
-            const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url;
-            
-            return (
-              <article 
-                key={post.id} 
-                className="group animate-fade-in"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <Link href={`/posts/${post.id}`} className="block">
-                  <div className="space-y-8">
-                    {/* Visual Container */}
-                    <div className="aspect-[4/5] overflow-hidden rounded-sm bg-gray-50 relative">
-                      {featuredImage ? (
-                        <img 
-                          src={featuredImage} 
-                          alt=""
-                          className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] scale-100 group-hover:scale-110"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-[10px] font-bold tracking-[0.5em] text-gray-200 uppercase">
-                          No Visual
+        {posts.length === 0 ? (
+          <div className="py-20 text-center animate-fade-in">
+            <p className="text-[10px] font-bold tracking-[0.4em] text-secondary uppercase">
+              No entries found at the moment.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20 sm:gap-y-32">
+            {posts.map((post, index) => {
+              const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url;
+              
+              return (
+                <article 
+                  key={post.id} 
+                  className="group animate-fade-in"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <Link href={`/posts/${post.id}`} className="block">
+                    <div className="space-y-8">
+                      {/* Visual Container */}
+                      <div className="aspect-[4/5] overflow-hidden rounded-sm bg-gray-50 relative">
+                        {featuredImage ? (
+                          <img 
+                            src={featuredImage} 
+                            alt=""
+                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] scale-100 group-hover:scale-110"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-[10px] font-bold tracking-[0.5em] text-gray-200 uppercase">
+                            No Visual
+                          </div>
+                        )}
+                        
+                        {/* Overlay for premium feel */}
+                        <div className="absolute inset-0 border border-black/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                      </div>
+                      
+                      {/* Content Section */}
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-4">
+                          <span className="h-[1px] w-8 bg-accent" />
+                          <time className="text-[9px] font-bold tracking-[0.3em] text-secondary uppercase">
+                            {new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })}
+                          </time>
                         </div>
-                      )}
-                      
-                      {/* Overlay for premium feel */}
-                      <div className="absolute inset-0 border border-black/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-                    </div>
-                    
-                    {/* Content Section */}
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-4">
-                        <span className="h-[1px] w-8 bg-accent" />
-                        <time className="text-[9px] font-bold tracking-[0.3em] text-secondary uppercase">
-                          {new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })}
-                        </time>
-                      </div>
-                      
-                      <h2 
-                        className="text-2xl sm:text-3xl font-bold leading-[1.1] tracking-tight group-hover:text-accent transition-colors duration-500"
-                        dangerouslySetInnerHTML={{ __html: post.title.rendered }} 
-                      />
-                      
-                      <div 
-                        className="text-sm text-secondary line-clamp-3 leading-relaxed"
-                        dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}
-                      />
-                      
-                      <div className="pt-4 overflow-hidden">
-                        <span className="text-[10px] font-extrabold uppercase tracking-[0.4em] inline-flex items-center gap-2 relative">
-                          Read Archive
-                          <span className="w-0 group-hover:w-6 h-[1px] bg-accent transition-all duration-500" />
-                        </span>
+                        
+                        <h2 
+                          className="text-2xl sm:text-3xl font-bold leading-[1.1] tracking-tight group-hover:text-accent transition-colors duration-500"
+                          dangerouslySetInnerHTML={{ __html: post.title.rendered }} 
+                        />
+                        
+                        <div 
+                          className="text-sm text-secondary line-clamp-3 leading-relaxed"
+                          dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}
+                        />
+                        
+                        <div className="pt-4 overflow-hidden">
+                          <span className="text-[10px] font-extrabold uppercase tracking-[0.4em] inline-flex items-center gap-2 relative">
+                            Read Archive
+                            <span className="w-0 group-hover:w-6 h-[1px] bg-accent transition-all duration-500" />
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Link>
-              </article>
-            );
-          })}
-        </div>
+                  </Link>
+                </article>
+              );
+            })}
+          </div>
+        )}
       </section>
 
       <footer className="py-32 border-t border-gray-50 px-6">
