@@ -15,7 +15,7 @@ export const metadata = {
 
 async function getPosts() {
   try {
-    const res = await fetch('https://cms.project8change.com/index.php/wp-json/wp/v2/posts?_embed&per_page=12', {
+    const res = await fetch('https://cms.project8change.com/wp-json/wp/v2/posts?_embed&per_page=12', {
       cache: 'no-store',
       headers: { 'Accept': 'application/json' }
     });

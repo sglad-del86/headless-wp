@@ -35,7 +35,7 @@ export async function generateMetadata({ params }) {
 
 async function getPost(id) {
   try {
-    const res = await fetch(`https://cms.project8change.com/index.php/wp-json/wp/v2/posts/${id}?_embed`, {
+    const res = await fetch(`https://cms.project8change.com/wp-json/wp/v2/posts/${id}?_embed`, {
       cache: 'no-store',
       headers: { 'Accept': 'application/json' }
     });
