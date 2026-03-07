@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic';
 
 async function getPosts() {
   try {
-    const res = await fetch('https://cms.project8change.com/wp-json/wp/v2/posts?_embed', {
+    const res = await fetch('https://cms.project8change.com/wp-json/wp/v2/posts?_embed&per_page=10', {
       cache: 'no-store',
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
@@ -11,23 +11,25 @@ async function getPosts() {
       }
     });
     if (!res.ok) {
-      console.error(`API response error: ${res.status} ${res.statusText}`);
-      return [];
+      return { error: `API response error: ${res.status} ${res.statusText}`, posts: [] };
     }
     const data = await res.json();
-    console.log(`Fetched ${data.length} posts`);
-    return Array.isArray(data) ? data : [];
+    return { posts: Array.isArray(data) ? data : [], error: null };
   } catch (error) {
-    console.error('Fetch error:', error);
-    return [];
+    return { error: `Fetch error: ${error.message}`, posts: [] };
   }
 }
 
 export default async function Page() {
-  const posts = await getPosts();
+  const { posts, error } = await getPosts();
 
   return (
     <main className="min-h-screen bg-white">
+      {error && (
+        <div className="fixed bottom-0 right-0 m-4 p-4 bg-red-50 border border-red-200 text-red-600 text-[10px] font-bold uppercase tracking-widest z-[100] rounded-sm">
+          System Warning: {error}
+        </div>
+      )}
       {/* Editorial Header */}
       <header className="pt-24 pb-12 sm:pt-40 sm:pb-24 px-6 sm:px-12 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-end gap-8 border-b border-gray-100">
         <div className="animate-fade-in">
