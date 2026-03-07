@@ -35,9 +35,16 @@ export async function generateMetadata({ params }) {
 
 async function getPost(id) {
   try {
+    const user = process.env.WP_USER;
+    const pass = process.env.WP_PASS;
+    const auth = Buffer.from(`${user}:${pass}`).toString('base64');
+
     const res = await fetch(`https://cms.project8change.com/wp-json/wp/v2/posts/${id}?_embed`, {
       cache: 'no-store',
-      headers: { 'Accept': 'application/json' }
+      headers: { 
+        'Accept': 'application/json',
+        'Authorization': `Basic ${auth}`
+      }
     });
     if (!res.ok) return null;
     return res.json();
