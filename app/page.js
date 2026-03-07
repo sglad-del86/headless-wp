@@ -1,22 +1,29 @@
+import Image from 'next/image';
 import Link from 'next/link';
+
 export const dynamic = 'force-dynamic';
+
+export const metadata = {
+  title: 'Project 8 Change | Thoughts & Observations',
+  description: 'Next.jsとWordPress REST APIを融合させた、次世代のデジタルジャーナル。洗練された読書体験を提供します。',
+  openGraph: {
+    title: 'Project 8 Change',
+    description: 'Thoughts & Observations Archive',
+    type: 'website',
+  },
+};
 
 async function getPosts() {
   try {
-    // Try bypassing simple WAF by including index.php in the path
-    const res = await fetch('https://cms.project8change.com/index.php/wp-json/wp/v2/posts?_embed&per_page=10', {
+    const res = await fetch('https://cms.project8change.com/index.php/wp-json/wp/v2/posts?_embed&per_page=12', {
       cache: 'no-store',
-      headers: {
-        'Accept': 'application/json',
-      }
+      headers: { 'Accept': 'application/json' }
     });
-    if (!res.ok) {
-      return { error: `API response error: ${res.status} ${res.statusText}. Please check WordPress REST API restriction settings.`, posts: [] };
-    }
+    if (!res.ok) return { posts: [], error: `API Error: ${res.status}` };
     const data = await res.json();
     return { posts: Array.isArray(data) ? data : [], error: null };
   } catch (error) {
-    return { error: `Fetch error: ${error.message}`, posts: [] };
+    return { posts: [], error: error.message };
   }
 }
 
@@ -81,11 +88,13 @@ export default async function Page() {
                       {/* Visual Container */}
                       <div className="aspect-[4/5] overflow-hidden rounded-sm bg-gray-50 relative">
                         {featuredImage ? (
-                          <img 
+                          <Image 
                             src={featuredImage} 
                             alt=""
-                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] scale-100 group-hover:scale-110"
-                            loading="lazy"
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            className="object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] scale-100 group-hover:scale-110"
+                            priority={index < 3}
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center text-[10px] font-bold tracking-[0.5em] text-gray-200 uppercase">
