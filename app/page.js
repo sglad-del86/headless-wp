@@ -89,6 +89,7 @@ export default async function Page() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20 sm:gap-y-32">
             {posts.map((post, index) => {
               const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url;
+              const proxiedThumbUrl = featuredImage ? `/api/image-proxy?url=${encodeURIComponent(featuredImage)}` : null;
               
               return (
                 <article 
@@ -100,9 +101,9 @@ export default async function Page() {
                     <div className="space-y-8">
                       {/* Visual Container */}
                       <div className="aspect-[4/5] overflow-hidden rounded-sm bg-gray-50 relative">
-                        {featuredImage ? (
+                        {proxiedThumbUrl ? (
                           <Image 
-                            src={featuredImage} 
+                            src={proxiedThumbUrl} 
                             alt=""
                             fill
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

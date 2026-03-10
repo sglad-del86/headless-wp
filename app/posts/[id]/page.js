@@ -58,16 +58,15 @@ export default async function PostPage({ params }) {
   const post = await getPost(id);
   if (!post) notFound();
 
-  const featuredImage = post._embedded?.['wp:featuredmedia']?.[0];
-  const imageUrl = featuredImage?.source_url;
-  const imageAlt = featuredImage?.alt_text || post.title.rendered;
+  // フィーチャード画像のURLもプロキシ経由にする
+  const proxiedImageUrl = imageUrl ? `/api/image-proxy?url=${encodeURIComponent(imageUrl)}` : null;
 
-  // 2. 構造化データの作成 (SEO: JSON-LD)
+  // 2. 構造化データの作成 (画像URLをプロキシ版に)
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: post.title.rendered,
-    image: imageUrl,
+    image: proxiedImageUrl,
     datePublished: post.date,
     dateModified: post.modified,
     author: [{
@@ -138,12 +137,12 @@ export default async function PostPage({ params }) {
           </div>
         </header>
 
-        {/* Hero Image - Optimized with next/image */}
-        {imageUrl && (
+        {/* Hero Image - Optimized with proxy */}
+        {proxiedImageUrl && (
           <div className="max-w-6xl mx-auto mb-20 sm:mb-32 px-6 animate-fade-in" style={{ animationDelay: '0.2s' }}>
             <div className="aspect-[21/9] w-full bg-gray-50 overflow-hidden relative">
               <Image 
-                src={imageUrl} 
+                src={proxiedImageUrl} 
                 alt={imageAlt} 
                 fill
                 priority
@@ -153,7 +152,7 @@ export default async function PostPage({ params }) {
           </div>
         )}
 
-        {/* Content Body - Prose powered with link optimization */}
+        {/* Content Body - Prose powered with link & image optimization */}
         <div className="max-w-3xl mx-auto px-6 animate-fade-in" style={{ animationDelay: '0.4s' }}>
           <div 
             className="prose prose-neutral prose-lg sm:prose-xl max-w-none 
@@ -166,14 +165,19 @@ export default async function PostPage({ params }) {
               selection:bg-accent/20 selection:text-primary"
             dangerouslySetInnerHTML={{ 
               __html: post.content.rendered
-                // 1. 基本的なドメイン置換 (CMSリンクをフロントエンドへ)
+                // 1. 基本的なドメイン置換
                 .replaceAll('https://cms.project8change.com', '')
-                // 2. IDベースのリンク (?p=123) を /posts/123 形式に変換
+                // 2. 画像URLをすべてプロキシ経由に書き換え
+                .replace(/src="https:\/\/cms\.project8change\.com([^"]+)"/g, (match, path) => {
+                  const fullUrl = `https://cms.project8change.com${path}`;
+                  return `src="/api/image-proxy?url=${encodeURIComponent(fullUrl)}"`;
+                })
+                // 3. IDベースのリンク (?p=123) を /posts/123 形式に変換
                 .replace(/href="\/(\?p=\d+)"/g, (match, p) => {
                   const id = p.split('=')[1];
                   return `href="/posts/${id}"`;
                 })
-                // 3. 末尾スラッシュなどの調整をして正規化
+                // 4. 外部リンクの調整
                 .replace(/href="\/(?!posts|contact|api)([^"]+)"/g, 'href="/posts/$1"')
             }}
           />
