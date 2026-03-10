@@ -58,6 +58,10 @@ export default async function PostPage({ params }) {
   const post = await getPost(id);
   if (!post) notFound();
 
+  const featuredMedia = post._embedded?.['wp:featuredmedia']?.[0];
+  const imageUrl = featuredMedia?.source_url;
+  const imageAlt = featuredMedia?.alt_text || post.title.rendered;
+
   // フィーチャード画像のURLもプロキシ経由にする
   const proxiedImageUrl = imageUrl ? `/api/image-proxy?url=${encodeURIComponent(imageUrl)}` : null;
 
@@ -167,10 +171,20 @@ export default async function PostPage({ params }) {
               __html: post.content.rendered
                 // 1. 基本的なドメイン置換
                 .replaceAll('https://cms.project8change.com', '')
-                // 2. 画像URLをすべてプロキシ経由に書き換え
-                .replace(/src="https:\/\/cms\.project8change\.com([^"]+)"/g, (match, path) => {
-                  const fullUrl = `https://cms.project8change.com${path}`;
-                  return `src="/api/image-proxy?url=${encodeURIComponent(fullUrl)}"`;
+                // 2. 画像URLをすべてプロキシ経由に書き換え (src と srcset 両方)
+                .replace(/(src|srcset)="https:\/\/cms\.project8change\.com([^"]+)"/g, (match, attr, path) => {
+                  if (attr === 'src') {
+                    const fullUrl = `https://cms.project8change.com${path}`;
+                    return `src="/api/image-proxy?url=${encodeURIComponent(fullUrl)}"`;
+                  } else {
+                    // srcset の場合はカンマ区切りで複数のURLがある可能性があるため、個別に変換
+                    const proxiedSrcset = path.split(',').map(part => {
+                      const [urlPart, size] = part.trim().split(' ');
+                      const fullUrl = urlPart.startsWith('http') ? urlPart : `https://cms.project8change.com${urlPart}`;
+                      return `/api/image-proxy?url=${encodeURIComponent(fullUrl)}${size ? ' ' + size : ''}`;
+                    }).join(', ');
+                    return `srcset="${proxiedSrcset}"`;
+                  }
                 })
                 // 3. IDベースのリンク (?p=123) を /posts/123 形式に変換
                 .replace(/href="\/(\?p=\d+)"/g, (match, p) => {
