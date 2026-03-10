@@ -150,6 +150,7 @@ export default async function PostPage({ params }) {
                 alt={imageAlt} 
                 fill
                 priority
+                unoptimized
                 className="object-cover grayscale-[0.5] hover:grayscale-0 transition-all duration-1000" 
               />
             </div>

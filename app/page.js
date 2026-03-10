@@ -106,6 +106,7 @@ export default async function Page() {
                             src={proxiedThumbUrl} 
                             alt=""
                             fill
+                            unoptimized
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             className="object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] scale-100 group-hover:scale-110"
                             priority={index < 3}
