@@ -169,15 +169,12 @@ export default async function PostPage({ params }) {
               selection:bg-accent/20 selection:text-primary"
             dangerouslySetInnerHTML={{ 
               __html: post.content.rendered
-                // 1. 基本的なドメイン置換
-                .replaceAll('https://cms.project8change.com', '')
-                // 2. 画像URLをすべてプロキシ経由に書き換え (src と srcset 両方)
+                // 1. 画像URLをすべてプロキシ経由に書き換える (ドメインが残っているうちに処理)
                 .replace(/(src|srcset)="https:\/\/cms\.project8change\.com([^"]+)"/g, (match, attr, path) => {
                   if (attr === 'src') {
                     const fullUrl = `https://cms.project8change.com${path}`;
                     return `src="/api/image-proxy?url=${encodeURIComponent(fullUrl)}"`;
                   } else {
-                    // srcset の場合はカンマ区切りで複数のURLがある可能性があるため、個別に変換
                     const proxiedSrcset = path.split(',').map(part => {
                       const [urlPart, size] = part.trim().split(' ');
                       const fullUrl = urlPart.startsWith('http') ? urlPart : `https://cms.project8change.com${urlPart}`;
@@ -186,13 +183,16 @@ export default async function PostPage({ params }) {
                     return `srcset="${proxiedSrcset}"`;
                   }
                 })
-                // 3. IDベースのリンク (?p=123) を /posts/123 形式に変換
+                // 2. IDベースのリンク (?p=123) を /posts/123 形式に変換
+                .replace(/href="https:\/\/cms\.project8change\.com\/\?p=(\d+)"/g, 'href="/posts/$1"')
                 .replace(/href="\/(\?p=\d+)"/g, (match, p) => {
                   const id = p.split('=')[1];
                   return `href="/posts/${id}"`;
                 })
-                // 4. 外部リンクの調整
-                .replace(/href="\/(?!posts|contact|api)([^"]+)"/g, 'href="/posts/$1"')
+                // 3. 残りのCMS内リンクを相対パスに変換 (これ以降は画像でない通常のリンクが対象)
+                .replaceAll('https://cms.project8change.com', '')
+                // 4. 外部リンクの調整 (既に相対パス化されたリンクを /posts/ に向ける)
+                .replace(/href="\/(?!posts|contact|api|wp-content|wp-includes)([^"]+)"/g, 'href="/posts/$1"')
             }}
           />
 

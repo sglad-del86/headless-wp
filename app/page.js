@@ -136,7 +136,16 @@ export default async function Page() {
                         
                         <div 
                           className="text-sm text-secondary line-clamp-3 leading-relaxed"
-                          dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}
+                          dangerouslySetInnerHTML={{ 
+                            __html: post.excerpt.rendered
+                              // 画像プロキシ対応
+                              .replace(/(src|srcset)="https:\/\/cms\.project8change\.com([^"]+)"/g, (match, attr, path) => {
+                                const fullUrl = `https://cms.project8change.com${path}`;
+                                return `${attr}="/api/image-proxy?url=${encodeURIComponent(fullUrl)}"`;
+                              })
+                              // ドメイン置換
+                              .replaceAll('https://cms.project8change.com', '')
+                          }}
                         />
                         
                         <div className="pt-4 overflow-hidden">
