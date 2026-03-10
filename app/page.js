@@ -138,12 +138,11 @@ export default async function Page() {
                           className="text-sm text-secondary line-clamp-3 leading-relaxed"
                           dangerouslySetInnerHTML={{ 
                             __html: post.excerpt.rendered
-                              // 画像プロキシ対応
-                              .replace(/(src|srcset)="https:\/\/cms\.project8change\.com([^"]+)"/g, (match, attr, path) => {
-                                const fullUrl = `https://cms.project8change.com${path}`;
-                                return `${attr}="/api/image-proxy?url=${encodeURIComponent(fullUrl)}"`;
+                              // 全ての画像をプロキシ経由にする
+                              .replace(/https?:\/\/cms\.project8change\.com\/wp-content\/uploads\/[^"\s'<>]+/g, (match) => {
+                                return `/api/image-proxy?url=${encodeURIComponent(match)}`;
                               })
-                              // ドメイン置換
+                              // 残りのドメインを消す
                               .replaceAll('https://cms.project8change.com', '')
                           }}
                         />
