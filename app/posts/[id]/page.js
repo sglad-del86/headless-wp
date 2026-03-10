@@ -169,7 +169,7 @@ export default async function PostPage({ params }) {
               selection:bg-accent/20 selection:text-primary"
             dangerouslySetInnerHTML={{ 
               __html: post.content.rendered
-                // 1. 画像URLをすべてプロキシ経由に書き換え (src/srcset/リンク先などすべて)
+                // 1. 画像とメディア (uploads) のリンクを確実にプロキシ経由にする (適切にエンコード)
                 .replace(/https?:\/\/cms\.project8change\.com\/wp-content\/uploads\/[^"\s'<>]+/g, (match) => {
                   return `/api/image-proxy?url=${encodeURIComponent(match)}`;
                 })
@@ -179,9 +179,9 @@ export default async function PostPage({ params }) {
                   const id = p.split('=')[1];
                   return `href="/posts/${id}"`;
                 })
-                // 3. 残りのCMS内リンクを相対パスに変換
+                // 3. 残りの通常の内部リンクを相対パスに変換
                 .replaceAll('https://cms.project8change.com', '')
-                // 4. 外部リンクの調整
+                // 4. 正規化 (postsなど特定のパス以外の内部リンクも個別記事へ向ける)
                 .replace(/href="\/(?!posts|contact|api|wp-content|wp-includes)([^"]+)"/g, 'href="/posts/$1"')
             }}
           />

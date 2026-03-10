@@ -9,16 +9,12 @@ export async function GET(request) {
   }
 
   try {
-    const user = process.env.WP_USER;
-    const pass = process.env.WP_PASS;
+    const user = (process.env.WP_USER || '').trim();
+    const pass = (process.env.WP_PASS || '').trim();
 
-    if (!user || !pass) {
-      console.warn('Image Proxy: WP_USER or WP_PASS environment variables are missing.');
-      // 外部からの不正利用を防ぐため、資格情報がない場合は直接WPにfetchせずエラーにするか、
-      // あるいは認証なしで試みる (もし公開画像であれば) 
-    }
+    console.log(`Image Proxy Attempt: URL=${imageUrl}, UserPresent=${!!user}, PassPresent=${!!pass}`);
 
-    const auth = Buffer.from(`${user || ''}:${pass || ''}`).toString('base64');
+    const auth = Buffer.from(`${user}:${pass}`).toString('base64');
     
     const res = await fetch(imageUrl, {
       headers: {
